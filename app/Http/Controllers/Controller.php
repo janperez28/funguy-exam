@@ -16,16 +16,15 @@ class Controller extends BaseController
 	 * Send an API response. 
 	 * This method must be used when returning API responses via controller.
 	 *
-	 * @param boolean $success
 	 * @param optional array $data
 	 * @param optional string|array $message 
 	 * @return Illuminate\Http\Response
 	 */
-	public function response($success, $data = array(), $message = null)
+	public function response($statusCode, $data = array(), $message = null)
 	{
 		// Return a JSON response.
-		return response()->json(compact('success', 'data', 'message'));
-	}
+		return response()->json(compact('data', 'message'))->setStatusCode($statusCode);
+	}	
 	
 	/**
 	 * Shorthand for Controller::response(true, ...)
@@ -34,7 +33,7 @@ class Controller extends BaseController
 	 */
 	public function success($data = array(), $message = null)
 	{
-		return $this->response(true, $data, $message);
+		return $this->response(200, $data, $message);
 	}
 	
 	/**
@@ -42,8 +41,8 @@ class Controller extends BaseController
 	 *
 	 * @see Controller::response
 	 */
-	public function error($message)
+	public function error($message = null)
 	{
-		return $this->response(false, array(), $message);
+		return $this->response(400, array(), $message);
 	}	
 }

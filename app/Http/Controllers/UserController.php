@@ -11,17 +11,13 @@ class UserController extends Controller
 	/**
 	 * Handle user store request.
 	 * 
-	 * @param Request
-	 * @return Response
+	 * @param Request $request	 
 	 */
 	public function store(Request $request)
-	{	
-		// TODO
-		// We may want to use the validate method of the ValidatesRequest trait and
-		// let the exception handler do the necessary action of sending the
-		// JSON error response.		
-		// For now, we will make use of the facade.
-		$params = $request->only('name', 'phone', 'nationality');		
+	{				
+		// Unfortunately, we cannot use the validate method of the ValidatesRequest trait
+		// since we won't be able to set the response content once the exception is thrown.
+		$params = $request->only('name', 'phone', 'nationality');				
 		
 		$validator = Validator::make($params, array(
 			'name' => 'required|max:255',
@@ -41,12 +37,67 @@ class UserController extends Controller
 			$user->phone = $params['phone'];
 			$user->nationality_id = $params['nationality'];
 			
-			$user->save();
-		
-			return $this->success(array(), trans("User was saved successfully."));
+			if ($user->save())
+			{		
+				return $this->success(array(), trans("User was saved successfully."));
+			}
+
+			// TODO
+			// Not sure what exception to raise on these kind of situations
 		}
 		
-		// Display error messages
+		// Not sure if we need to use 422 status code here.
 		return $this->error($validator->errors());
+	}
+	
+	/**
+	 * Handle delete user requests.
+	 * 
+	 * @param int $userId
+	 * @return Illuminate\Http\Response
+	 */
+	public function destroy($userId)
+	{
+		$user = User::findOrFail($userId);
+				
+		if ($user->delete())
+		{
+			// We could also send a 204 here but it should not send any content :(
+			return $this->success();
+		}
+				
+		// A 409 might be appropriate on this stuation.
+		return $this->error("Cannot delete user record.");
+	}
+	
+	/**
+	 * Handle list users request.
+	 *
+	 * @param Illuminate\Http\Request $request
+	 * @return Illuminate\Http\Response
+	 */
+	public function index(Request $request)
+	{
+		$users = User::orderBy('id', 'desc');		
+		$params = $request->only('last_id', 'limit');
+		
+		$validator = Validator::make($params, array(
+			'last_id' => 'exists:' . with(new User)->getTable() . ',id',
+			'limit' => 'number|min:1|max:20'
+		));
+		
+		if ($validator->passes())
+		{	
+			// Add query filter for start id.
+			if ($params['last_id'])
+			{
+				$users->where('id', '>', $params['last_id']);
+			}
+			print_r($params['limit']);
+			
+			$users->take($params['limit']);
+		}
+		
+		return $this->success($users->get()->toArray());
 	}
 }

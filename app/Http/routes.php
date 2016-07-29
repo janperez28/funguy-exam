@@ -17,7 +17,7 @@ Route::group(array('middleware' => 'api'), function()
 	// Register resource controller for users.
 	// Partial resource for now since we can only add and delete users.
 	Route::resource('user', 'UserController', array(
-		'only' => array('store', 'destroy')
+		'only' => array('index', 'store', 'destroy')
 	));
 
 	Route::group(array('prefix' => 'list'), function()

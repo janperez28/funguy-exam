@@ -24,6 +24,30 @@
 				height: auto;
 				text-align: left;
 			}				
+			
+			#user-records .col-id {
+				width: 10%;
+			}
+			
+			#user-records .col-name {
+				width: 35%;
+			}
+			
+			#user-records .col-phone {
+				width: 20%;
+			}
+			
+			#user-records .col-nationality {
+				width: 20%;
+			}
+			
+			#user-records .col-actions {
+				width: 15%;
+			}
+			
+			#user-records button.close {
+				float: none;
+			}
 		</style>
 	</head>	
 	<body>							
@@ -64,8 +88,36 @@
 						</div>						
 					</form>					
 				</div>
-			<div>						
-		</div>		
+			</div>			
+			<div class="row">
+				<div class="col-md-12">
+					<h1 class="page-header">User Records</h1>
+					<table class="table table-hover" id="user-records">
+						<thead>
+							<tr>
+								<th class="col-id">ID</th>
+								<th class="col-name">Name</th>
+								<th class="col-phone">Phone Number</th>
+								<th class="col-nationality">Nationality</th>
+								<th class="col-actions">Actions</th>
+							</tr>
+						</thead>
+						<tbody>	
+							<tr class="hidden row-template">
+								<td class="col-id"></td>
+								<td class="col-name"></td>
+								<td class="col-phone"></td>
+								<td class="col-nationality"></td>
+								<td class="col-actions">
+									<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>				
+		
 		<script>
 		jQuery(function($)
 		{
@@ -108,24 +160,24 @@
 					type: 'post',
 					success: function(response)
 					{
-						if (response.success)
-						{													
-							// Set the user_id given for the user. 
-							// This will be used for any delete request hereafter.					
-							$userId.val(response.data.user_id);
-														
-							// We expect a string for successful operation
-							$formNotif.html(response.message);
-							$formNotif.addClass('alert-success');
-							$formNotif.show();
-							
-							// Show delete option on the form and disable the submit button.
-							$submit.hide();
-						}
-						else if (typeof response.message == 'object')
+						// Set the user_id given for the user. 
+						// This will be used for any delete request hereafter.					
+						$userId.val(response.data.user_id);
+													
+						// We expect a string for successful operation
+						$formNotif.html(response.message);
+						$formNotif.addClass('alert-success');
+						$formNotif.show();
+						
+						// Show delete option on the form and disable the submit button.
+						$submit.hide();
+					},
+					error: function(response)
+					{						
+						if (typeof response.responseJSON == 'object')
 						{
 							// Show error messages on their respective fields
-							$.each(response.message, function(key, message)
+							$.each(response.responseJSON.message, function(key, message)
 							{
 								var $group = $form.find('.form-group.' + key); 
 								

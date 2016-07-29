@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 
@@ -41,6 +42,8 @@ class Handler extends ExceptionHandler
 
     /**
      * Render an exception into an HTTP response.
+	 * TODO
+	 * We need to make sure we are returning the correct HTTP status code based on the current operation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
@@ -58,13 +61,20 @@ class Handler extends ExceptionHandler
 		{
 			$statusCode = 404;
 		}
+		// Return internal server error for fatal errors.
+		else if ($e instanceof FatalErrorException)
+		{
+			$statusCode = 500;
+		}
 		else 
 		{
 			$statusCode = $this->defaultUnknownStatusCode;
-		}
+		}	
 		
 		// Any other exception, return 400 status code.
-		// Make sure we are returning JSON response						
+		// Make sure we are returning JSON response.		
+		// TODO
+		// Add support for sending appropriate response type based on Accept header of the request.
 		return response()->json()->setStatusCode($statusCode);
     }
 }

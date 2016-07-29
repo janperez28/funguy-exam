@@ -8,7 +8,8 @@ class ListController extends Controller
 {
 	/**
 	 * Handle request for list of nationalities.
-	 *	 
+	 *	
+	 * @return Illuminate\Http\Response
 	 */
 	public function nationalities()
 	{
