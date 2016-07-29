@@ -18,14 +18,14 @@ class Controller extends BaseController
 	 *
 	 * @param boolean $success
 	 * @param optional array $data
-	 * @param optional string $error
+	 * @param optional string|array $message 
 	 * @return array
 	 */
-	public function response($success, $data = array(), $error = null)
+	public function response($success, $data = array(), $message = null)
 	{
 		// Fortunately, Laravel 5 knows that we are sending JSON encoded string when 
 		// controller's response is a php variable, we don't need to use Response::json any more.
-		return compact('success', 'data', 'error');
+		return compact('success', 'data', 'message');
 	}
 	
 	/**
@@ -33,9 +33,9 @@ class Controller extends BaseController
 	 *
 	 * @see Controller::response
 	 */
-	public function success($data = array())
+	public function success($data = array(), $message = null)
 	{
-		return $this->response(true, $data);
+		return $this->response(true, $data, $message);
 	}
 	
 	/**
@@ -46,5 +46,5 @@ class Controller extends BaseController
 	public function error($message)
 	{
 		return $this->response(false, array(), $message);
-	}
+	}	
 }
