@@ -47,11 +47,17 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
-    {		
+    {				
 		if ($e instanceof HttpException)
 		{
 			$statusCode = $e->getStatusCode();
-		}		
+		}
+		// If a ModelNotFoundException is thrown, return a Not Found response.
+		// The code need to make sure that this is the appropriate exception they need to throw.
+		else if ($e instanceof ModelNotFoundException) 
+		{
+			$statusCode = 404;
+		}
 		else 
 		{
 			$statusCode = $this->defaultUnknownStatusCode;
