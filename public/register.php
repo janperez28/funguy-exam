@@ -18,11 +18,6 @@
 				display: none;
 			}
 			
-			#register .btn-reset,
-			#register .btn-delete {
-				display: none;				
-			}
-			
 			#register .form-control-feedback {
 				position: relative;
 				width: 100%;
@@ -64,10 +59,9 @@
 						<div class="form-group row">
 							<div class="col-sm-3 col-sm-offset-3 col-md-2 col-md-offset-2">
 								<button type="submit" class="btn btn-primary btn-submit">Submit</button>
+								<button type="reset" class="btn btn-secondary btn-reset">New</button>
 							</div>
-						</div>
-						<!-- This input item will be populated once form is submitted successfully -->
-						<input type="hidden" name="user-id" value="" />
+						</div>						
 					</form>					
 				</div>
 			<div>						
@@ -94,11 +88,16 @@
 				return result;
 			}
 			
-			$form.on('submit', function(evt)
+			function cleanUpForm()
 			{
 				// Remove error messages and error styles first		
 				$form.find('.form-control-feedback').html('');
 				$form.find('.has-error').removeClass('has-error');
+			}
+			
+			$form.on('submit', function(evt)
+			{
+				cleanUpForm();
 				
 				// Send a JSON encoded string instead of form encoded values as stated on the requirements.
 				$.ajax({
@@ -139,6 +138,8 @@
 			
 				evt.preventDefault();					
 			});
+						
+			$form.on('reset', cleanUpForm);				
 			
 			// Populate nationality options. Retrieve list from the API by sending a GET request.
 			$.ajax({
