@@ -9,8 +9,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+
 class Handler extends ExceptionHandler
 {
+	protected $defaultUnknownStatusCode = 400;
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -44,7 +47,18 @@ class Handler extends ExceptionHandler
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
-    {
-        return parent::render($request, $e);
+    {		
+		if ($e instanceof HttpException)
+		{
+			$statusCode = $e->getStatusCode();
+		}		
+		else 
+		{
+			$statusCode = $this->defaultUnknownStatusCode;
+		}
+		
+		// Any other exception, return 400 status code.
+		// Make sure we are returning JSON response						
+		return response()->json()->setStatusCode($statusCode);
     }
 }
