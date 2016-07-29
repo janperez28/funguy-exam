@@ -19,13 +19,12 @@ class Controller extends BaseController
 	 * @param boolean $success
 	 * @param optional array $data
 	 * @param optional string|array $message 
-	 * @return array
+	 * @return Illuminate\Http\Response
 	 */
 	public function response($success, $data = array(), $message = null)
 	{
-		// Fortunately, Laravel 5 knows that we are sending JSON encoded string when 
-		// controller's response is a php variable, we don't need to use Response::json any more.
-		return compact('success', 'data', 'message');
+		// Return a JSON response.
+		return response()->json(compact('success', 'data', 'message'));
 	}
 	
 	/**
