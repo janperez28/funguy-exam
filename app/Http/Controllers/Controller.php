@@ -15,6 +15,8 @@ class Controller extends BaseController
 	/**
 	 * Send an API response. 
 	 * This method must be used when returning API responses via controller.
+	 * TODO
+	 * Use the constants for the HTTP code statuses of Symfony instead of the actual values.
 	 *
 	 * @param optional array $data
 	 * @param optional string|array $message 
@@ -38,6 +40,10 @@ class Controller extends BaseController
 	
 	/**
 	 * Shorthand for Controller::response(false, array, string)
+	 *
+	 * TODO
+	 * It seems that we are using 400 as the "generic" error response code. 
+	 * Checkout RFC and other REST guides/tutorials for proper status code to use based on the current operation.
 	 *
 	 * @see Controller::response
 	 */
