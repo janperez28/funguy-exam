@@ -17,7 +17,7 @@ class APIController extends Controller
 	 * @return Illuminate\Http\Response
 	 */
 	public function response($statusCode, $data = array(), $message = null)
-	{
+	{x
 		// Return a JSON response.
 		return response()->json(compact('data', 'message'))->setStatusCode($statusCode);
 	}	
