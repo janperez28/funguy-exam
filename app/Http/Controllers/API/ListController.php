@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use DB;
 
-class ListController extends Controller
+class ListController extends APIController
 {
 	/**
 	 * Handle request for list of nationalities.

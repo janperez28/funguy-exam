@@ -38,8 +38,8 @@ class RouteServiceProvider extends ServiceProvider
     public function map(Router $router)
     {
         $this->mapWebRoutes($router);
-
-        //
+        
+		$this->mapAPIRoutes($router);
     }
 
     /**
@@ -58,4 +58,20 @@ class RouteServiceProvider extends ServiceProvider
             require app_path('Http/routes.php');
         });
     }
+	
+	/**
+	 * Define the "api" routes for the application.
+	 * These routes all receive throttling, and other API related (RESTful) middlewares.
+	 * 
+	 * @param \Illuminate\Routing\Router $router
+	 * @return void
+	 */
+	protected function mapAPIRoutes(Router $router)
+	{
+		$router->group(array(
+			'namespace' => $this->namespace . '\API', 'middleware' => 'api',
+		), function($router) {
+			require app_path('Http/routes_api.php');
+		});
+	}
 }

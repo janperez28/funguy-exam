@@ -1,7 +1,8 @@
-<?php	
+<?php		
+
 	function get_api_url($url)
 	{
-		static $apiBaseUrl = '//funguy-exam.com';
+		static $apiBaseUrl = '//funguy-exam.com/api/v1';
 	
 		return $apiBaseUrl . "/$url";
 	}

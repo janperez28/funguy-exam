@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Validator;
 
-class UserController extends Controller
+class UserController extends APIController
 {
 	/**
 	 * Handle user store request.
